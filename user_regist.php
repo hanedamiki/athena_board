@@ -22,7 +22,7 @@
                 <center><h1>会員登録</h1></center>
                 <br>
                 <br>
-                <form action="" method="post" class="form-horizontal">
+                <form action="./user_regist_comp.php" method="post" class="form-horizontal">
                 <div class="form-group">
                     <label for="input_name" class="col-md-3 control-label">ニックネーム：</label>
                     <div class="col-md-9">
