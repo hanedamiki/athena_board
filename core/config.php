@@ -1,6 +1,6 @@
 <?php
 	$host = "localhost";
 	$username = "root";
-	$password = "root";
-	$dbname = "athena_itq";
+	$password = "";
+	$dbname = "athena_site";
 ?>

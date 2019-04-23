@@ -1,30 +1,7 @@
-<?php  
-	session_start();
-
-	// DBとの接続
-	include_once 'dbconnect.php';
-
-	//SQL命令文を$queryへ代入
-	$query = "SELECT * FROM users WHERE user_id=".$_SESSION['user']."";// ユーザーIDをキーにDBからユーザー情報を取得
-
-	//$queryを実行
-	$result = $mysqli->query($query);
-
-	if (!$result) {
-		print('クエリーが失敗しました。' . $mysqli->error);
-		$mysqli->close();
-		exit();
-	}
-
-	/*while (
-	$row = $result->fetch_assoc()) {
-	$username = $row['username'];
-	$email = $row['email'];
-	$birth_year = $row['birth_year'];
-	}*/
-
-	// データベースの切断
-	$result->close();
+<?php
+session_start();
+include_once 'dbconnect.php';
+// ここまで、register.phpと同様
 ?>
 
 <html>
@@ -47,48 +24,42 @@
 <body>
 	<div class="container">
 		<div id="main">
+			<?php
+			if(!isset($_SESSION['user'])) {
+			?>
+		    <p class="text-right"><a href="regist.php">新規登録</a></p>
+		    <p class="text-right"><a href="login.php">ログイン</a></p>
+		    <?php 
+			}else{
+		    ?>
+		    <p class="text-right"><a href="home.php">マイページ</a></p>
+		    <p class="text-right"><a href="logout.php?logout">ログアウト</a></p>
+		    <?php
+		    }
+		    ?>
 			<center><h1>イッテQについて語ろう！の掲示板</h1></center>
 			<br>
-			<?php
-			// 受け取ったidのレコードの削除
-			if (isset($_POST["delete_id"])) {
-				$delete_id = $_POST["delete_id"];
-				$sql  = "DELETE FROM bbs WHERE id = :delete_id;";
-				$stmt = $pdo->prepare($sql);
-				$stmt -> bindValue(":delete_id", $delete_id, PDO::PARAM_INT);
-				$stmt -> execute();
-			}
-
-			// 受け取ったデータを書き込む
-			if (isset($_POST["content"]) && isset($_POST["user_name"])) {
-				$content   = $_POST["content"];
-				$user_name = $_POST["user_name"];
-				$sql  = "INSERT INTO bbs (content, user_name, updated_at) VALUES (:content, :user_name, NOW());";
-				$stmt = $pdo->prepare($sql);
-				$stmt -> bindValue(":content", $content, PDO::PARAM_STR);
-				$stmt -> bindValue(":user_name", $user_name, PDO::PARAM_STR);
-				$stmt -> execute();
-			} 
-			?>
-
-
 			<h3>投稿フォーム</h3>
 			<form class="form" action="bbs.php" method="post">
 			<?php
-				if(!isset($_SESSION['user'])) {
+			if(!isset($_SESSION['user'])) {
 			?>
 			<div class="form-group">
-					<label class="control-label">投稿者</label>
-					<input class="form-control" type="text" name="user_name">
+				<label class="control-label">投稿者</label>
+				<input class="form-control" type="text" name="user_name">
 			</div>
+			<?php
+			}else{
+			?>
+			<input class="form-control" type="hidden" name="user_name" value="<?php echo(isset($_SESSION['user'])) ?>">
 			<?php
 			}
 			?>
 			<div class="form-group">
-					<label class="control-label">投稿内容</label>
-					<textarea class="form-control" type="text" name="content"></textarea>
-				</div>
-				<button class="btn btn-primary pull-right" type="submit">送信</button>
+				<label class="control-label">投稿内容</label>
+				<textarea class="form-control" type="text" name="content"></textarea>
+			</div>
+			<button class="btn btn-primary pull-right" name="submit" type="submit">送信</button>
 			</form>
 			<br>
 			<h3>発言リスト</h3>
@@ -102,23 +73,28 @@
 				</tr>
 				<?php
 				// データベースからデータを取得する
-				$sql = "SELECT * FROM bbs ORDER BY updated_at;";
-				$stmt = $pdo->prepare($sql);
-				$stmt -> execute();
+				$query = "SELECT * FROM bbs ORDER BY updated_at;";
+				$result = $mysqli->query($query);
+				if (!$result) {
+                	print('クエリーが失敗しました。' . $mysqli->error);
+                	$mysqli->close();
+                	exit();
+                }
+
 				// 取得したデータを表示する
-				while ($row = $stmt -> fetch(PDO::FETCH_ASSOC)) { ?>
+				while ($row = $result->fetch_assoc()) { ?>
 					<tr>
-						<td><?= $row["id"] ?></td>
-						<td><?= $row["updated_at"] ?></td>
-						<td><?= $row["content"] ?></td>
-						<td><?= $row["user_name"] ?></td>
+						<td><?php echo $row['id']; ?></td>
+						<td><?php echo $row['updated_at']; ?></td>
+						<td><?php echo $row['content']; ?></td>
+						<td><?php echo $row['user']; ?></td>
 						<td>
-						<?php
-							if(!isset($_SESSION['user'])) {
-						?>
+					    <?php
+					    if(isset($_SESSION['user'])) {
+					    ?>
 						<form action="bbs.php" method="post">
-							<input type="hidden" name="delete_id" value=<?= $row["id"] ?>>
-							<button class="btn btn-danger" type="submit">削除</button>
+							<input type="hidden" name="delete_id" value=<?php echo $row['id']; ?>>
+							<button class="btn btn-danger" name="delete" type="submit">削除</button>
 						</form>
 						<?php
 						}
