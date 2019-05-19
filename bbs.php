@@ -21,11 +21,11 @@ include_once 'dbconnect.php';
 <?php 
 	// 受け取ったデータを書き込む
 	if (isset($_POST["submit"]) ) {
-		$content   = $_POST["content"];
+			$content = $mysqli->real_escape_string($_POST["content"]);
 		if(!isset($_SESSION['user'])) {
-		    $user_name = $_POST["user_name"];
+		    $user_name = $mysqli->real_escape_string($_POST["user_name"]);
 		}else{
-		    $user_name = $_SESSION['user'];
+			$user_name = $mysqli->real_escape_string($_SESSION['user']);
 		}
 		$query  = "INSERT INTO bbs (user, content, updated_at) VALUES ('$user_name', '$content',  NOW());";
 

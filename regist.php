@@ -28,6 +28,13 @@ if(isset($_POST['signup'])) {
 
 	$nickname = $mysqli->real_escape_string($_POST['nickname']);
 	$email = $mysqli->real_escape_string($_POST['email']);
+	if(filter_var($email, FILTER_VALIDATE_EMAIL)){ 
+	} else { 
+		error_log("正しくないメールアドレスを検知しました。", 1,"haneda.miki@gmail.com"); ?>
+		<div class="alert alert-danger" role="alert">正しいメールアドレスではありません。</div>
+	<?php 
+		exit;
+	};
 	$password = $mysqli->real_escape_string($_POST['password']);
 	$password = password_hash($password, PASSWORD_BCRYPT);
 
