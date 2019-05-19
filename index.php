@@ -27,16 +27,16 @@ include_once 'dbconnect.php';
 			<?php
 			if(!isset($_SESSION['user'])) {
 			?>
-		    <p class="text-right"><a href="regist.php">新規登録</a></p>
-		    <p class="text-right"><a href="login.php">ログイン</a></p>
-		    <?php 
+				<p class="text-right"><a href="regist.php">新規登録</a></p>
+				<p class="text-right"><a href="login.php">ログイン</a></p>
+			<?php 
 			}else{
 		    ?>
-		    <p class="text-right"><a href="home.php">マイページ</a></p>
-		    <p class="text-right"><a href="logout.php?logout">ログアウト</a></p>
-		    <?php
-		    }
-		    ?>
+				<p class="text-right"><a href="home.php">マイページ</a></p>
+				<p class="text-right"><a href="logout.php?logout">ログアウト</a></p>
+			<?php
+			}
+			?>
 			<center><h1>イッテQについて語ろう！の掲示板</h1></center>
 			<br>
 			<h3>投稿フォーム</h3>
@@ -44,14 +44,14 @@ include_once 'dbconnect.php';
 			<?php
 			if(!isset($_SESSION['user'])) {
 			?>
-			<div class="form-group">
-				<label class="control-label">投稿者</label>
-				<input class="form-control" type="text" name="user_name">
-			</div>
+				<div class="form-group">
+					<label class="control-label">投稿者</label>
+					<input class="form-control" type="text" name="user_name">
+				</div>
 			<?php
 			}else{
 			?>
-			<input class="form-control" type="hidden" name="user_name" value="<?php echo(isset($_SESSION['user'])) ?>">
+				<input class="form-control" type="hidden" name="user_name" value="<?php echo(isset($_SESSION['user'])) ?>">
 			<?php
 			}
 			?>
@@ -76,9 +76,9 @@ include_once 'dbconnect.php';
 				$query = "SELECT * FROM bbs ORDER BY updated_at;";
 				$result = $mysqli->query($query);
 				if (!$result) {
-                	print('クエリーが失敗しました。' . $mysqli->error);
-                	$mysqli->close();
-                	exit();
+					print('クエリーが失敗しました。' . $mysqli->error);
+					$mysqli->close();
+					exit();
                 }
 
 				// 取得したデータを表示する
@@ -89,9 +89,9 @@ include_once 'dbconnect.php';
 						<td><?php echo $row['content']; ?></td>
 						<td><?php echo $row['user']; ?></td>
 						<td>
-					    <?php
-					    if(isset($_SESSION['user'])) {
-					    ?>
+						<?php
+						if(isset($_SESSION['user'])) {
+						?>
 						<form action="bbs.php" method="post">
 							<input type="hidden" name="delete_id" value=<?php echo $row['id']; ?>>
 							<button class="btn btn-danger" name="delete" type="submit">削除</button>
