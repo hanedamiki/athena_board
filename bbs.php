@@ -23,21 +23,19 @@ include_once 'dbconnect.php';
 	if (isset($_POST["submit"]) ) {
 			$content = $mysqli->real_escape_string($_POST["content"]);
 		if(!isset($_SESSION['user'])) {
-		    $user_name = $mysqli->real_escape_string($_POST["user_name"]);
+			$user_name = $mysqli->real_escape_string($_POST["user_name"]);
 		}else{
 			$user_name = $mysqli->real_escape_string($_SESSION['user']);
 		}
 		$query  = "INSERT INTO bbs (user, content, updated_at) VALUES ('$user_name', '$content',  NOW());";
-
-    	if($mysqli->query($query)) {  ?>
-    		<div class="alert alert-success" role="alert">登録が完了しました。</div>
-    		<a href="index.php">掲示板へ戻る</a>
-    		<?php } else { ?>
-    		<div class="alert alert-danger" role="alert">エラーが発生しました。</div>
-    		<a href="index.php">掲示板へ戻る</a>
-    		<?php
-    	}
-
+		if($mysqli->query($query)) {  ?>
+			<div class="alert alert-success" role="alert">登録が完了しました。</div>
+			<a href="index.php">掲示板へ戻る</a>
+			<?php } else { ?>
+			<div class="alert alert-danger" role="alert">エラーが発生しました。</div>
+			<a href="index.php">掲示板へ戻る</a>
+			<?php
+		}
 	}
 			
 			
@@ -46,19 +44,15 @@ include_once 'dbconnect.php';
 		$delete_id = $_POST["delete_id"];
 		$query  = "DELETE FROM bbs WHERE id = $delete_id";
 
-    	if($mysqli->query($query)) {  ?>
-    		<div class="alert alert-success" role="alert">削除が完了しました。</div>
-    		<a href="index.php">掲示板へ戻る</a>
-    		<?php } else { ?>
-    		<div class="alert alert-danger" role="alert">エラーが発生しました。</div>
-    		<a href="index.php">掲示板へ戻る</a>
-    		<?php
-    	}
-
+		if($mysqli->query($query)) {  ?>
+			<div class="alert alert-success" role="alert">削除が完了しました。</div>
+			<a href="index.php">掲示板へ戻る</a>
+			<?php } else { ?>
+			<div class="alert alert-danger" role="alert">エラーが発生しました。</div>
+			<a href="index.php">掲示板へ戻る</a>
+			<?php
+		}
 	}
-
-
-
 ?>
 
 
